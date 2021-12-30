@@ -12,7 +12,7 @@ const exec = util.promisify(require('child_process').exec);
  * @param {bool} typescript Use Typescript?
  * @param {bool} tailwind Use Tailwind?
  */
-export const CreateProject = (typescript, tailwind) => {
+export const CreateProject = async (typescript, tailwind) => {
     const s = new Spinner('Creating React Application.', ['\\', '|', '/', '-']);
 
     s.start();
