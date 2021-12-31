@@ -1,11 +1,15 @@
 import util from 'util';
-import { Spinner } from "clui"
+import pkg from 'clui';
 import fs from 'fs';
+import { exec } from 'child_process';
 import {Log, Error} from '../helpers/index.js';
 import { CSSFile, ReactFile, HTML, ElectronMainFile, TWConfigFile } from './files.js';
 
 // Using this to allow some error handling here.
-const exec = util.promisify(require('child_process').exec);
+const bashExec = util.promisify(exec);
+
+// Spinneroo.
+const { Spinner } = pkg;
 
 /**
  * Start the project creation.
@@ -74,14 +78,15 @@ const Tailwind = async () => {
  * @param {bool} tw Use Tailwind?
  */
  const ProjectRestructure = async (t, tw) => {
-    fs.rmdirSync(process.cwd() + '/src', { recursive: true });
-	fs.rmdirSync(process.cwd() + '/public', {recursive: true});
+    fs.rmSync(process.cwd() + '/src', { recursive: true });
+	fs.rmSync(process.cwd() + '/public', {recursive: true});
     fs.mkdirSync(process.cwd() + '/src');
 	fs.mkdirSync(process.cwd() + '/public');
 
     fs.mkdirSync(process.cwd() + '/src/renderer');
     fs.mkdirSync(process.cwd() + '/src/renderer/components');
     fs.mkdirSync(process.cwd() + '/src/renderer/containers');
+    fs.mkdirSync(process.cwd() + '/src/renderer/css');
     fs.mkdirSync(process.cwd() + '/src/main');
 
     fs.unlinkSync(process.cwd() + '/README.md');
@@ -95,10 +100,10 @@ const Tailwind = async () => {
 
     let data = fs.readFileSync(process.cwd() + '/package.json', {encoding: 'utf-8'});
     let dataJSON = JSON.parse(data);
-    dataJSON.main = '/src/main/electron.js';
+    dataJSON.main = './src/main/electron.js';
     dataJSON.scripts.dev = 'concurrently -k \"BROWSER=none npm start\" \"npm:electron\"';
     dataJSON.scripts.electron = 'wait-on tcp:3000 && electron .';
-    fs.writeFileSync('/package.json', JSON.stringify(dataJSON))
+    fs.writeFileSync(process.cwd() + '/package.json', JSON.stringify(dataJSON))
 }
 
 /**
@@ -109,7 +114,7 @@ const Command = async (command) => {
     try {
         // If you're wondering what I am adding onto the end. 
         // Tbh I don't really know but I read on SO that it stops the bash command from displaying messages, hence it won't destroy my console AeStHeTiC.
-        await exec(command + ' >nul 2>&1');
+        await bashExec(command, { stdio: ['pipe', 'pipe', 'ignore']});
     } catch (e) {
         Log(e, Error);
     }

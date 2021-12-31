@@ -1,12 +1,16 @@
 {
-  "name": "create-reactron-app",
-  "version": "1.0.0",
+  "name": "@tobulevicius/create-reactron-app",
+  "version": "1.1.1",
   "description": "A command line tool for creating an Electron application that utilises React for the frontend.",
-  "main": "src/index.js",
+  "main": "./src/index.js",
+  "exports": "./src/index.js",
   "type": "module",
   "homepage": "https://emilis.co.uk",
   "repository": {
     "url": "https://github.com/tobulevicius/create-reactron-app.git"
+  },
+  "bin": {
+    "create-reactron-app": "./src/index.js"
   },
   "keywords": [
     "react",

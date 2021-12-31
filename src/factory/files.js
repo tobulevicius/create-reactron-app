@@ -10,13 +10,19 @@ const regularCSS = `body, html {
 	width: 100vw;
 }
 
+.red {
+  color: red;
+}
+
 .container {
 	height: 100vh;
 	width: 100vh;
 
 	display: flex;
+  flex-direction: column;
 	justify-content: center;
 	align-items: center;
+  gap: 1rem;
 }
 
 .container h1 {
@@ -49,8 +55,8 @@ function createWindow() {
 
   win.loadURL(
     isDev
-      ? http://localhost:3000'
-      : \`file://${path.join(__dirname, '../build/index.html')}\`
+      ? 'http://localhost:3000'
+      : \`file://\${path.join(__dirname, '../build/index.html')}\`
   );
 
   if (isDev) {
@@ -95,11 +101,13 @@ export const ReactFile = (tailwind) =>{ return `import ReactDOM from 'react-dom'
 import './renderer/css/index.css';
 
 ReactDOM.render(
-	<React.StrictMode>
-		<div className='${tailwind ? 'w-screen h-screen flex items-center justify-center' : 'container'}'>
-			<h1>Thanks for using create-reactron-app 👍</h1>
-		</div>
-	</React.StrictMode>,
+  <div className='${tailwind ? 'w-screen h-screen flex flex-col items-center justify-center gap-2' : 'container'}'>
+    <h1>Thanks for using create-reactron-app 👍</h1>
+
+    <h1>Replace this element with a 'main' container within ./renderer/containers/</h1>
+
+    <h1>Created with <span className='${tailwind ? 'text-red-500' : 'red'}'>&lt;3</span> by <a href='https://emilis.co.uk'>Emilis Tobulevicius</a></h1>
+  </div>,
 	document.getElementById('root')
 );`
 }
